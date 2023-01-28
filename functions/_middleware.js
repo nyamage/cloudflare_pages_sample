@@ -1,8 +1,8 @@
 function authentication(context) {
+  console.log(`func:authentication context:${context}`)
   if (context.request.headers.get("x-email") != "admin@example.com") {
     return new Response("Unauthorized", { status: 403 });
   }
-  console.log(`func:authentication context:${context}`)
   return context.next();
 }
 
