@@ -1,12 +1,4 @@
-function createUnauthorizedResponse() {
-  return new Response("Unauthorized", {
-    status: 401,
-    headers: new Headers({
-      "WWW-Authenticate": "Basic",
-    }),
-  });
-}
-function authentication(context) {
+function dump(context) {
   console.log(`func:authentication context:${JSON.stringify(context)}`);
   console.log(
     `func:authentication context.request.cf:${JSON.stringify(
@@ -16,8 +8,14 @@ function authentication(context) {
   for (const pair in context.request.headers) {
     console.log(`func:authentication ${pair[0]}:${pair[1]}`);
   }
+}
+function authentication(context) {
+  const env = context.env;
+  const request = context.env;
 
-  const authorization = context.request.headers.get("authorization");
+  dump(context);
+
+  const authorization = request.headers.get("authorization");
   if (authorization == null) {
     return new Response("Unauthorized", {
       status: 401,
@@ -26,13 +24,16 @@ function authentication(context) {
       }),
     });
   }
+
   const arrayOfAuthorization = authorization.split(" ");
   const type = arrayOfAuthorization[0];
   const credentials = atob(arrayOfAuthorization[1]);
-  if (type == "Basic" && credentials == "user:test") {
+  if (
+    type == "Basic" &&
+    credentials == `${env.BASIC_AUTH_USERNAME}:${env.BASIC_AUTH_PASSWORD}`
+  ) {
     return context.next();
   }
-
   return new Response("Forbidden", {
     status: 403,
   });
