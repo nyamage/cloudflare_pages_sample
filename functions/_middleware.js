@@ -6,4 +6,4 @@ function authentication(context) {
   return context.next();
 }
 
-export const onRequest = [errorHandling, authentication];
+export const onRequest = [authentication];
