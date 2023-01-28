@@ -9,10 +9,20 @@ function authentication(context) {
     console.log(`func:authentication ${pair[0]}:${pair[1]}`);
   }
 
-  if (context.request.headers.get("x-email") != "admin@example.com") {
-    return new Response("Unauthorized", { status: 403 });
+  const authorization = context.request.headers.get("authorization");
+  const arrayOfAuthorization = authorization.split(" ");
+  const type = arrayOfAuthorization[0];
+  const credential = atob(arrayOfAuthorization[1]);
+  if (type == "Basic" && credential == "test") {
+    return context.next();
   }
-  return context.next();
+
+  return new Response("Unauthorized", {
+    status: 403,
+    headers: new Headers({
+      "WWW-Authenticate": "Basic",
+    }),
+  });
 }
 
 export const onRequest = [authentication];
