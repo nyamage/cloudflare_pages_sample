@@ -11,7 +11,7 @@ function dump(context) {
 }
 function authentication(context) {
   const env = context.env;
-  const request = context.env;
+  const request = context.request;
 
   dump(context);
 
