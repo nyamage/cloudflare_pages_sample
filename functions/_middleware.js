@@ -1,3 +1,11 @@
+function createUnauthorizedResponse() {
+  return new Response("Unauthorized", {
+    status: 403,
+    headers: new Headers({
+      "WWW-Authenticate": "Basic",
+    }),
+  });
+}
 function authentication(context) {
   console.log(`func:authentication context:${JSON.stringify(context)}`);
   console.log(
@@ -10,6 +18,9 @@ function authentication(context) {
   }
 
   const authorization = context.request.headers.get("authorization");
+  if (authorization == null) {
+    return createUnauthorizedResponse();
+  }
   const arrayOfAuthorization = authorization.split(" ");
   const type = arrayOfAuthorization[0];
   const credential = atob(arrayOfAuthorization[1]);
@@ -17,12 +28,7 @@ function authentication(context) {
     return context.next();
   }
 
-  return new Response("Unauthorized", {
-    status: 403,
-    headers: new Headers({
-      "WWW-Authenticate": "Basic",
-    }),
-  });
+  return createUnauthorizedResponse();
 }
 
 export const onRequest = [authentication];
