@@ -1,8 +1,8 @@
 function authentication(context) {
+  console.log("func:authentication context:%O", context);
+  console.log("func:authentication context.request:%O", context.request);
   console.log(
-    "func:authentication context:%O, context.request:%O, context.request.headers:%O",
-    context,
-    context.request,
+    "func:authentication context.request.headers:%O",
     context.request.headers
   );
   if (context.request.headers.get("x-email") != "admin@example.com") {
