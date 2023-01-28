@@ -28,8 +28,8 @@ function authentication(context) {
   }
   const arrayOfAuthorization = authorization.split(" ");
   const type = arrayOfAuthorization[0];
-  const credential = atob(arrayOfAuthorization[1]);
-  if (type == "Basic" && credential == "test") {
+  const credentials = atob(arrayOfAuthorization[1]);
+  if (type == "Basic" && credentials == "user:test") {
     return context.next();
   }
 
