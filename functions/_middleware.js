@@ -1,7 +1,11 @@
 function authentication(context) {
   console.log(`func:authentication context:${JSON.stringify(context)}`);
-  console.log(`func:authentication context.cf:${JSON.stringify(context.cf)}`);
-  for (const pair in context.headers) {
+  console.log(
+    `func:authentication context.request.cf:${JSON.stringify(
+      context.request.cf
+    )}`
+  );
+  for (const pair in context.request.headers) {
     console.log(`func:authentication ${pair[0]}:${pair[1]}`);
   }
 
