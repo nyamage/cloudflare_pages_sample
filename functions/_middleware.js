@@ -1,6 +1,6 @@
 function createUnauthorizedResponse() {
   return new Response("Unauthorized", {
-    status: 403,
+    status: 401,
     headers: new Headers({
       "WWW-Authenticate": "Basic",
     }),
@@ -19,7 +19,12 @@ function authentication(context) {
 
   const authorization = context.request.headers.get("authorization");
   if (authorization == null) {
-    return createUnauthorizedResponse();
+    return new Response("Unauthorized", {
+      status: 401,
+      headers: new Headers({
+        "WWW-Authenticate": "Basic",
+      }),
+    });
   }
   const arrayOfAuthorization = authorization.split(" ");
   const type = arrayOfAuthorization[0];
@@ -28,7 +33,9 @@ function authentication(context) {
     return context.next();
   }
 
-  return createUnauthorizedResponse();
+  return new Response("Forbidden", {
+    status: 403,
+  });
 }
 
 export const onRequest = [authentication];
